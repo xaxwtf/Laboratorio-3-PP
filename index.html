@@ -190,6 +190,123 @@ filtro.addEventListener('change',()=>{
        CargarTodo();
    }
 });
+function ordenarx(nroParametro){
+    switch(nroParametro){
+        case 1:
+        datosCargados.sort((a,b)=>{
+        let r=0;
+        if(a._id>b._id){
+            r=1
+        }
+        else if (a._id<b._id){
+            r=-1;
+        }
+        return r;
+         });
+            break;
+        case 2:
+        datosCargados.sort((a,b)=>{
+        let r=0;
+        if(a._apellido>b._apellido){
+            r=1
+        }
+        else if (a._apellido<b._apellido){
+            r=-1;
+        }
+        return r;
+         });
+            break;
+        case 3:
+        datosCargados.sort((a,b)=>{
+        let r=0;
+        if(a._nombre>b._nombre){
+            r=1
+        }
+        else if (a._nombre<b._nombre){
+            r=-1;
+        }
+        return r;
+         });
+            break;
+        case 4:
+        datosCargados.sort((a,b)=>{
+        let r=0;
+        if(a._dni>b._dni){
+            r=1
+        }
+        else if (a._dni<b._dni){
+            r=-1;
+        }
+        return r;
+         });
+            break;
+        case 5:
+        datosCargados.sort((a,b)=>{
+        let r=0;
+        if(a._cursoNumero>b._cursoNumero){
+            r=1
+        }
+        else if (a._cursoNumero<b._cursoNumero){
+            r=-1;
+        }
+        return r;
+         });
+            break;
+        case 6: 
+        datosCargados.sort((a,b)=>{
+        let r=0;
+        if(a._cursoLetra>b._cursoLetra){
+            r=1
+        }
+        else if (a._cursoLetra<b._cursoLetra){
+            r=-1;
+        }
+        return r;
+         });
+            break;
+        case 7:
+        datosCargados.sort((a,b)=>{
+        let r=0;
+        if(a._materia>b._materia){
+            r=1
+        }
+        else if (a._materia<b._materia){
+            r=-1;
+        }
+        return r;
+         });
+            break;
+        case 8:
+        datosCargados.sort((a,b)=>{
+        let r=0;
+        if(a._anio>b._anio){
+            r=1
+        }
+        else if (a._anio<b._anio){
+            r=-1;
+        }
+        return r;
+         });
+            break;
+            
+    }
+    
+}
+
+window.addEventListener('load',()=>{
+    if(filtro.options[filtro.selectedIndex].value=='Alumnos'){
+        limpiarTabla();
+        CargarAlumnos();
+   }
+   else if(filtro.options[filtro.selectedIndex].value=='Docentes'){
+        limpiarTabla();
+        CargarDocentes();
+   }
+   else{
+       limpiarTabla();
+       CargarTodo();
+   }
+})
 document.getElementById('calcularPromedio').addEventListener('click',(e)=>{
     e.preventDefault();
     const test =document.querySelector('section#promedios input');
@@ -386,11 +503,8 @@ document.querySelector('button#agregar').addEventListener('click',(e)=>{
         myform.style.display="none";
         
     }
-    
-    
-
-
 })
+
 
     </script>
     <style>
