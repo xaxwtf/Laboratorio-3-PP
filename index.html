@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <main>
+                <h1>Formulario Datos</h1>
+                <section class="input">
+                    <p>filtrar Por:</p>
+                    <select name="Filtrarx" id="filtrarX">
+                        <option value="Todos">Todos</option>
+                        <option value="Alumnos">Alumnos</option> 
+                        <option value="Docentes">Docentes</option> 
+                    </select>
+                </section>
+                <section id="promedios"> 
+                    <p> Valor Promedio DNI </p>
+                    <input type="text" readonly>
+                    <button id="calcularPromedio">Calcular</button>
+                </section>
+                <section class="option">
+                    <div>
+                        <p>ID</p>
+                        <input type="checkbox" name="Ids" id="ckid" checked>
+                    </div>
+                    <div>
+                        <p>Apellido</p>
+                        <input type="checkbox" name="Apellido" id="ckapellido" checked>
+                    </div>
+                    <div>
+                        <p>Nombre</p>
+                        <input type="checkbox" name="Nombre" id="cknombre" checked>
+                    </div>
+                    <div>
+                        <p>DNI</p>
+                        <input type="checkbox" name="dni" id="ckdni" checked>
+                    </div>
+                    <div>
+                        <P>Curso N°</P>
+                        <input type="checkbox" name="cursoNumero" id="ckcursonro" checked>
+                    </div>
+                    <div>
+                        <p>Curso Letra</p>
+                        <input type="checkbox" name="cursoLetra" id="ckcursoletra" checked>
+                    </div>
+                    <div>
+                        <p>Materia</p>
+                        <input type="checkbox" name="Materia" id="ckmateria" checked>
+                    </div>
+                    <div>
+                        <p>Año</p>
+                        <input type="checkbox" name="anio" id="ckanio" checked>
+                    </div>
+                    
+                </section>
+                <table id="miTabla">
+                    <thead>
+                        <th class="id"> ID </th>
+                        <th class="apellido"> APELLIDO </th>
+                        <th class="nombre"> NOMBRE </th>
+                        <th class="dni"> DNI </th>
+                        <th class="cursoNro"> CURSO NUMERO </th>
+                        <th class="cursoLetra"> CURSO LETRA </th>
+                        <th class="materia"> MATERIA </th>
+                        <th class="anio"> AÑO </th>
+                    </thead>
+                </table>
+                <button  id="agregar">AGREGAR</button>
+                <form action="" name="fAgregar" id="fAgregar">
+                    <p>ID:</p>
+                    <input type="text" disabled>
+                    <p>Apellido</p>
+                    <input type="text">
+                    <p>Nombre</p>
+                    <input type="text">
+                    <p>DNI</p>
+                    <input type="text">
+                    <select name="tipo" id="tipox">
+                        <option value="Todos">Todos</option>
+                        <option value="Alumnos">Alumnos</option> 
+                        <option value="Docentes">Docentes</option> 
+                    </select>
+                </form>
+                
+    </main>
+
+
+
+
+    <script>
+
+    class Persona {
+        _id;
+        _apellido;
+        _nombre;
+        _dni;
+        constructor(id, apellido, nombre, dni){
+            this._id=id;
+            this._apellido=apellido;
+            this._nombre=nombre;
+            this._dni=dni;
+        }
+        toString(){
+            return '<td class="id">'+this._id+'</td><td class="apellido">'+this._apellido+'</td><td class="nombre">'+this._nombre+'</td><td class="dni">'+this._dni+'</td>';
+        }
+    }
+    class Alumno extends Persona{
+        _cursoLetra;
+        _cursoNumero;
+        constructor(id, apellido, nombre, dni , cursoLetra, cursoNumero){
+            super(id,apellido,nombre,dni);
+            this._cursoLetra=cursoLetra;
+            this._cursoNumero=cursoNumero;
+        }
+        toString(){
+            return ''+super.toString()+'<td class="cursoNumero">'+this._cursoNumero+'</td><td class="cursoLetra">'+this._cursoLetra+'</td><td class="materia">N/A</td><td class="anio">N/A</td>';
+        }
+    }
+    class Docente extends Persona{
+        _materia;
+        _anio;
+        constructor(id, apellido, nombre, dni , materia, anio){
+            super(id,apellido,nombre,dni);
+            this._materia=materia;
+            this._anio=anio;
+        }
+        toString(){
+            return ''+super.toString()+'<td class="cursoNumero">N/A</td><td class="cursoLetra">N/A</td><td class="materia">'+this._materia+'</td><td class="anio">'+this._anio+'</td>';
+        }
+    }
+    const datos=JSON.parse('[{"id":1,"dni":17663295,"nombre":"FABIAN MARCELO","apellido":"ABADIE","cursoNumero":1,"cursoLetra":"F"},{"id":2,"dni":38724762,"nombre":"MAIRA DAIANA","apellido":"ABALOS","cursoNumero":3,"cursoLetra":"M"},{"id":3,"dni":25447357,"nombre":"NOELIA LIDIA","apellido":"ABBA","cursoNumero":2,"cursoLetra":"N"},{"id":4,"dni":27577699,"nombre":"MARÍA SOLEDAD","apellido":"ACHOR","cursoNumero":2,"cursoLetra":"M"},{"id":900,"dni":11496581,"nombre":"JOSE MIGUEL","apellido":"ARMALEO","materia":"Fisica","año":1},{"id":899,"dni":35326658,"nombre":"ROSA DEL VALLE","apellido":"LOPEZ","materia":"Lengua","año":3},{"id":898,"dni":39638351,"nombre":"DANIELA BELEN","apellido":"BROGGI D`ATENA","materia":"Matematica","año":3},{"id":897,"dni":17275566,"nombre":"PABLO ALBERTO","apellido":"ALMEIDA","materia":"Quimica","año":1}]');
+    console.log(datos);
+    let datosCargados=new Array();
+    for(let i=0;i<datos.length;i++){
+        if(datos[i].cursoLetra!= undefined && datos[i].cursoNumero!=undefined){
+            let nuevo=new Alumno(datos[i].id, datos[i].apellido,datos[i].nombre,datos[i].dni,datos[i].cursoLetra, datos[i].cursoNumero);
+            datosCargados.push(nuevo);
+        }
+        else{
+            let nuevo=new Docente(datos[i].id, datos[i].apellido,datos[i].nombre,datos[i].dni,datos[i].materia, datos[i].año);
+            datosCargados.push(nuevo);
+        }
+    }
+    console.log(datosCargados);
+const tabla=document.getElementById('miTabla');
+function CargarAlumnos(){
+    for(let i=0;i<datosCargados.length;i++){
+        if(datosCargados[i] instanceof Alumno ){
+            tabla.insertRow(-1).innerHTML = datosCargados[i].toString();
+        }
+    }
+};
+function CargarDocentes(){
+    for(let i=0;i<datosCargados.length;i++){
+        if(datosCargados[i] instanceof Docente ){
+            tabla.insertRow(-1).innerHTML = datosCargados[i].toString();
+        }
+    }
+};
+function CargarTodo(){
+    for(let i=0;i<datosCargados.length;i++){
+        tabla.insertRow(-1).innerHTML = datosCargados[i].toString();
+    }
+};
+function limpiarTabla(){
+    var table = document.getElementById("miTabla");
+    var rowCount = table.rows.length;
+    for(let i=rowCount;i>1;i--){
+        table.deleteRow(i -1);
+    }
+    
+}
+CargarTodo();
+const filtro=document.getElementById('filtrarX');
+filtro.addEventListener('change',()=>{
+   if(filtro.options[filtro.selectedIndex].value=='Alumnos'){
+        limpiarTabla();
+        CargarAlumnos();
+   }
+   else if(filtro.options[filtro.selectedIndex].value=='Docentes'){
+        limpiarTabla();
+        CargarDocentes();
+   }
+   else{
+       limpiarTabla();
+       CargarTodo();
+   }
+});
+document.getElementById('calcularPromedio').addEventListener('click',(e)=>{
+    e.preventDefault();
+    const test =document.querySelector('section#promedios input');
+    console.log(test);
+    let resultado;
+    let unidades=0;
+    if(filtro.options[filtro.selectedIndex].value=='Alumnos'){
+        resultado=datosCargados.reduce((buffer,elemento)=>{
+            let aux=0;
+            if(elemento instanceof Alumno ){
+                aux=elemento._dni;
+            }
+            return buffer+aux;
+        },0);
+        unidades=datosCargados.reduce((buffer,elemento)=>{
+            let aux=0;
+            if(elemento instanceof Alumno ){
+                 aux=1;
+            }
+            return buffer+aux;
+        },0);
+   }
+   else if(filtro.options[filtro.selectedIndex].value=='Docentes'){
+    resultado=datosCargados.reduce((buffer,elemento)=>{
+        let aux=0;
+        if(elemento instanceof Docente ){
+                aux= elemento._dni;
+        }
+        return buffer+aux;
+    },0);
+    unidades=datosCargados.reduce((buffer,elemento)=>{
+        let aux=0;
+            if(elemento instanceof Docente ){
+                aux=1;
+            }
+            return buffer+aux;
+    },0);
+    
+   }
+   else{
+    resultado=datosCargados.reduce((buffer,elemento)=> buffer+elemento._dni,0);
+    unidades=datosCargados.length;
+   }
+  
+    test.value=resultado/unidades;
+});
+document.querySelector('#ckapellido').addEventListener('change',()=>{
+    let estoySelecionado=document.querySelector('#ckapellido').checked;
+    const todos=document.querySelectorAll('.apellido');
+    console.log(todos);
+    if(!estoySelecionado){
+        
+        for(let i=0;i<todos.length;i++){
+            todos[i].className+=' invisible';
+        }
+    }
+    else{
+        for(let i=0;i<todos.length;i++){
+            todos[i].classList.remove('invisible');
+        }
+    }
+});
+document.querySelector('#ckid').addEventListener('change',()=>{
+    let estoySelecionado=document.querySelector('#ckid').checked;
+    
+    const todos=document.querySelectorAll('.id');
+    console.log(todos);
+    if(!estoySelecionado){
+        
+        for(let i=0;i<todos.length;i++){
+            todos[i].className+=' invisible';
+        }
+    }
+    else{
+        for(let i=0;i<todos.length;i++){
+            todos[i].classList.remove('invisible');
+        }
+    }
+});
+document.querySelector('#cknombre').addEventListener('change',()=>{
+    let estoySelecionado=document.querySelector('#cknombre').checked;
+    
+    const todos=document.querySelectorAll('.nombre');
+    console.log(todos);
+    if(!estoySelecionado){
+        
+        for(let i=0;i<todos.length;i++){
+            todos[i].className+=' invisible';
+        }
+    }
+    else{
+        for(let i=0;i<todos.length;i++){
+            todos[i].classList.remove('invisible');
+        }
+    }
+}); 
+document.querySelector('#ckdni').addEventListener('change',()=>{
+    let estoySelecionado=document.querySelector('#ckdni').checked;
+    
+    const todos=document.querySelectorAll('.dni');
+    console.log(todos);
+    if(!estoySelecionado){
+        
+        for(let i=0;i<todos.length;i++){
+            todos[i].className+=' invisible';
+        }
+    }
+    else{
+        for(let i=0;i<todos.length;i++){
+            todos[i].classList.remove('invisible');
+        }
+    }
+}); 
+document.querySelector('#ckcursonro').addEventListener('change',()=>{
+    let estoySelecionado=document.querySelector('#ckcursonro').checked;
+    
+    const todos=document.querySelectorAll('.cursoNumero');
+    console.log(todos);
+    if(!estoySelecionado){
+        
+        for(let i=0;i<todos.length;i++){
+            todos[i].className+=' invisible';
+        }
+    }
+    else{
+        for(let i=0;i<todos.length;i++){
+            todos[i].classList.remove('invisible');
+        }
+    }
+}); 
+document.querySelector('#ckcursoletra').addEventListener('change',()=>{
+    let estoySelecionado=document.querySelector('#ckcursoletra').checked;
+    
+    const todos=document.querySelectorAll('.cursoLetra');
+    console.log(todos);
+    if(!estoySelecionado){
+        
+        for(let i=0;i<todos.length;i++){
+            todos[i].className+=' invisible';
+        }
+    }
+    else{
+        for(let i=0;i<todos.length;i++){
+            todos[i].classList.remove('invisible');
+        }
+    }
+}); 
+document.querySelector('#ckmateria').addEventListener('change',()=>{
+    let estoySelecionado=document.querySelector('#ckmateria').checked;
+    
+    const todos=document.querySelectorAll('.materia');
+    console.log(todos);
+    if(!estoySelecionado){
+        
+        for(let i=0;i<todos.length;i++){
+            todos[i].className+=' invisible';
+        }
+    }
+    else{
+        for(let i=0;i<todos.length;i++){
+            todos[i].classList.remove('invisible');
+        }
+    }
+}); 
+document.querySelector('#ckanio').addEventListener('change',()=>{
+    let estoySelecionado=document.querySelector('#ckanio').checked;
+    
+    const todos=document.querySelectorAll('.anio');
+    console.log(todos);
+    if(!estoySelecionado){
+        
+        for(let i=0;i<todos.length;i++){
+            todos[i].className+=' invisible';
+        }
+    }
+    else{
+        for(let i=0;i<todos.length;i++){
+            todos[i].classList.remove('invisible');
+        }
+    }
+});
+document.querySelector('button#agregar').addEventListener('click',(e)=>{
+    e.preventDefault();
+    const boton=document.querySelector('button#agregar');
+    
+    const myform=document.forms['fAgregar'];
+    console.log(boton);
+    if(boton.innerHTML=="AGREGAR"){
+        myform.style.display="block";
+        boton.innerHTML="Cancelar";
+    }
+    else{
+        boton.innerHTML="AGREGAR";
+        myform.style.display="none";
+        
+    }
+    
+    
+
+
+})
+
+    </script>
+    <style>
+        main{
+            margin: auto;
+            width: 90%;
+            background: grey;
+            text-align: center;
+        }
+        section{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin: 2%;
+            width: 100%;
+
+        }
+        section.option{
+            margin: 3%;
+        }
+        section.option div{
+            border: 1px solid white;
+        }
+        table{
+            width: 100%;
+        }
+        th{
+            border: 1px solid white;
+        }
+        td{
+            border: 1px solid white;
+        }
+        form{
+            display: none;
+        }
+        .invisible{
+            display: none;    
+        }
+    </style>
+    </body>
+</html>
